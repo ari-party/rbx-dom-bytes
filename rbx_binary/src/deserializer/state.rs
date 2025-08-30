@@ -494,7 +494,6 @@ This may cause unexpected or broken behavior in your final results if you rely o
                             let value: BinaryString = chunk.read_binary_string()?.into();
                             let bytes_consumed = start_size - chunk.len();
                             add_property(instance, &property, value.into());
-                            // BinaryString: variable length, track per-instance
                             instance.byte_size += bytes_consumed;
                         }
                     }
@@ -513,7 +512,6 @@ This may cause unexpected or broken behavior in your final results if you rely o
                             })?;
 
                             add_property(instance, &property, value.into());
-                            // Tags: variable length, track per-instance
                             instance.byte_size += buffer.len();
                         }
                     }
@@ -543,7 +541,6 @@ rbx-dom may require changes to fully support this property. Please open an issue
                                     );
                                 }
                             }
-                            // Attributes: variable length, track per-instance
                             instance.byte_size += buffer_len;
                         }
                     }
@@ -570,7 +567,6 @@ rbx-dom may require changes to fully support this property. Please open an issue
                                     );
                                 }
                             }
-                            // MaterialColors: variable length, track per-instance
                             instance.byte_size += buffer_len;
                         }
                     }
