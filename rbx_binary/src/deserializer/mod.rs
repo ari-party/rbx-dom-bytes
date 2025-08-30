@@ -1,15 +1,14 @@
 mod error;
-mod header;
+pub mod header;
 mod state;
 
-use std::{io::Read, str};
+use std::io::Read;
+use std::str;
 
 use rbx_dom_weak::WeakDom;
 use rbx_reflection::ReflectionDatabase;
 
 use self::state::DeserializerState;
-
-pub(crate) use self::header::FileHeader;
 
 pub use self::error::Error;
 
@@ -84,14 +83,19 @@ impl<'db> Deserializer<'db> {
                     deserializer.decode_end_chunk(&chunk.data)?;
                     break;
                 }
-                _ => match str::from_utf8(&chunk.name) {
-                    Ok(name) => log::info!("Unknown binary chunk name {name}"),
-                    Err(_) => log::info!("Unknown binary chunk name {:?}", chunk.name),
-                },
+                _ =>
+                    match str::from_utf8(&chunk.name) {
+                        Ok(name) => log::info!("Unknown binary chunk name {name}"),
+                        Err(_) => log::info!("Unknown binary chunk name {:?}", chunk.name),
+                    }
             }
         }
 
-        Ok(deserializer.finish())
+        let instance_byte_sizes = deserializer.get_all_instance_byte_sizes();
+        let mut dom = deserializer.finish();
+        dom.instance_byte_sizes = Some(instance_byte_sizes);
+
+        Ok(dom)
     }
 }
 

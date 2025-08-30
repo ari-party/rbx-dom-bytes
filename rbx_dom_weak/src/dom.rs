@@ -18,6 +18,9 @@ pub struct WeakDom {
     instances: AHashMap<Ref, Instance>,
     root_ref: Ref,
     unique_ids: AHashSet<UniqueId>,
+    /// Map from instance referent to the number of bytes dedicated to that instance
+    /// This is populated during binary deserialization
+    pub instance_byte_sizes: Option<ahash::HashMap<i32, usize>>,
 }
 
 impl WeakDom {
@@ -27,6 +30,7 @@ impl WeakDom {
             instances: AHashMap::new(),
             root_ref: builder.referent,
             unique_ids: AHashSet::new(),
+            instance_byte_sizes: None,
         };
 
         dom.insert(Ref::none(), builder);
@@ -75,6 +79,7 @@ impl WeakDom {
             instances,
             root_ref,
             unique_ids,
+            instance_byte_sizes: None,
         }
     }
 
@@ -500,6 +505,7 @@ impl Default for WeakDom {
             instances: AHashMap::new(),
             root_ref: Ref::none(),
             unique_ids: AHashSet::new(),
+            instance_byte_sizes: None,
         }
     }
 }

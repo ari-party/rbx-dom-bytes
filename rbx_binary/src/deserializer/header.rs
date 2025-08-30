@@ -6,7 +6,7 @@ use super::error::InnerError;
 
 /// All the information contained in the header before any chunks are read from
 /// the file.
-pub(crate) struct FileHeader {
+pub struct FileHeader {
     /// The number of instance types (represented for us as `TypeInfo`) that are
     /// in this file. Generally useful to pre-size some containers before
     /// reading the file.
