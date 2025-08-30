@@ -1,5 +1,6 @@
 use rbx_types::{Ref, Variant};
 use ustr::{Ustr, UstrMap};
+use ahash::HashMap;
 
 /**
 Represents an instance that can be turned into a new
@@ -37,6 +38,7 @@ pub struct InstanceBuilder {
     pub(crate) class: Ustr,
     pub(crate) properties: Vec<(Ustr, Variant)>,
     pub(crate) children: Vec<InstanceBuilder>,
+    pub(crate) binary_referent: Option<i32>,
 }
 
 impl InstanceBuilder {
@@ -52,6 +54,7 @@ impl InstanceBuilder {
             class,
             properties: Vec::new(),
             children: Vec::new(),
+            binary_referent: None,
         }
     }
 
@@ -67,6 +70,7 @@ impl InstanceBuilder {
             class,
             properties: Vec::with_capacity(capacity),
             children: Vec::new(),
+            binary_referent: None,
         }
     }
 
@@ -78,6 +82,7 @@ impl InstanceBuilder {
             class: Ustr::default(),
             properties: Vec::new(),
             children: Vec::new(),
+            binary_referent: None,
         }
     }
 
@@ -92,6 +97,12 @@ impl InstanceBuilder {
             referent: referent.into(),
             ..self
         }
+    }
+
+    /// Set the binary referent from the file for byte size tracking.
+    pub fn with_binary_referent(mut self, binary_referent: i32) -> Self {
+        self.binary_referent = Some(binary_referent);
+        self
     }
 
     /// Change the name of the `InstanceBuilder`.
@@ -212,6 +223,10 @@ pub struct Instance {
 
     /// Any properties stored on the object that are not `Name` or `ClassName`.
     pub properties: UstrMap<Variant>,
+
+    /// The binary referent from the file, used for byte size tracking.
+    /// This is `None` for instances not loaded from binary files.
+    pub(crate) binary_referent: Option<i32>,
 }
 
 impl Instance {
@@ -235,5 +250,18 @@ impl Instance {
     #[inline]
     pub fn parent(&self) -> Ref {
         self.parent
+    }
+
+    /// Returns the number of bytes dedicated to this instance in the binary file,
+    /// or 0 if byte tracking is not available or this instance was not loaded from binary.
+    ///
+    /// This method requires the byte_sizes HashMap to look up the byte size information.
+    /// You can get this from `dom.instance_byte_sizes`.
+    pub fn byte_size(&self, byte_sizes: &HashMap<i32, usize>) -> usize {
+        if let Some(binary_ref) = self.binary_referent {
+            byte_sizes.get(&binary_ref).copied().unwrap_or(0)
+        } else {
+            0
+        }
     }
 }

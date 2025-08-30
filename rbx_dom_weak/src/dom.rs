@@ -123,6 +123,24 @@ impl WeakDom {
         self.instances.get_mut(&referent)
     }
 
+    /// Returns the byte size of an instance if byte tracking is available.
+    pub fn get_instance_byte_size(&self, referent: Ref) -> usize {
+        if let Some(byte_sizes) = &self.instance_byte_sizes {
+            if let Some(instance) = self.get_by_ref(referent) {
+                let size = instance.byte_size(byte_sizes);
+                if size > 0 {
+                    size
+                } else {
+                    0
+                }
+            } else {
+                0
+            }
+        } else {
+            0
+        }
+    }
+
     /// Returns the [`UniqueId`] for the Instance with the provided referent, if it
     /// exists.
     pub fn get_unique_id(&self, referent: Ref) -> Option<UniqueId> {
@@ -198,6 +216,7 @@ impl WeakDom {
                     name: builder.name,
                     class: builder.class,
                     properties: builder.properties.into_iter().collect(),
+                    binary_referent: builder.binary_referent,
                 },
             );
 

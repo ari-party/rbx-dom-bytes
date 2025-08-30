@@ -190,7 +190,7 @@ fn find_canonical_property<'de>(
                 migration,
             })
         }
-        None => {
+        _ => {
             let canonical_type = match binary_type.to_default_rbx_type() {
                 Some(rbx_type) => rbx_type,
                 None => {
@@ -339,7 +339,8 @@ impl<'db, R: Read> DeserializerState<'db, R> {
 
         for &referent in &referents {
             self.instances_by_ref.insert(referent, Instance {
-                builder: InstanceBuilder::with_property_capacity(type_name.as_str(), prop_capacity),
+                builder: InstanceBuilder::with_property_capacity(type_name.as_str(), prop_capacity)
+                    .with_binary_referent(referent),
                 children: Vec::new(),
                 byte_size: 4,
             });
