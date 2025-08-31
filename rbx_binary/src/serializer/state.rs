@@ -39,7 +39,7 @@ static FILE_FOOTER: &[u8] = b"</roblox>";
 /// Represents all of the state during a single serialization session. A new
 /// `BinarySerializer` object should be created every time we want to serialize
 /// a binary model file.
-pub(super) struct SerializerState<'dom, 'db, W> {
+pub struct SerializerState<'dom, 'db, W> {
     serializer: &'db Serializer<'db>,
 
     /// The dom containing all of the instances that we're serializing.

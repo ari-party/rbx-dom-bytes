@@ -6,7 +6,7 @@ use std::io::Write;
 use rbx_dom_weak::{types::Ref, WeakDom};
 use rbx_reflection::ReflectionDatabase;
 
-use self::state::SerializerState;
+pub use self::state::SerializerState;
 
 pub use self::error::Error;
 
