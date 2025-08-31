@@ -229,6 +229,7 @@ impl<'dom, 'db> TypeInfos<'dom, 'db> {
 }
 
 impl<'dom, 'db, W: Write> SerializerState<'dom, 'db, W> {
+    /// Creates a new `SerializerState` for serializing a Roblox binary model or place.
     pub fn new(serializer: &'db Serializer<'db>, dom: &'dom WeakDom, output: W) -> Self {
         SerializerState {
             serializer,
@@ -495,6 +496,7 @@ impl<'dom, 'db, W: Write> SerializerState<'dom, 'db, W> {
         log::debug!("Collected {} referents", self.id_to_referent.len());
     }
 
+    /// Writes the file header containing magic bytes, signature, version, and instance counts.
     pub fn write_header(&mut self) -> Result<(), InnerError> {
         log::trace!("Writing header");
 

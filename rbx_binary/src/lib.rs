@@ -77,7 +77,7 @@ pub mod text_format {
 
 pub use crate::{
     deserializer::{Deserializer, Error as DecodeError},
-    serializer::{CompressionType, Error as EncodeError, Serializer},
+    serializer::{CompressionType, Error as EncodeError, Serializer, SerializerState},
 };
 
 /// Deserialize a Roblox binary model or place from a stream.

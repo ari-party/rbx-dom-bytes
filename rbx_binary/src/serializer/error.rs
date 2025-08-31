@@ -19,7 +19,7 @@ impl From<InnerError> for Error {
 }
 
 #[derive(Debug, Error)]
-pub(super) enum InnerError {
+pub enum InnerError {
     #[error(transparent)]
     Io {
         #[from]
