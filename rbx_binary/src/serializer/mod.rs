@@ -9,6 +9,7 @@ use rbx_reflection::ReflectionDatabase;
 pub use self::state::SerializerState;
 
 pub use self::error::Error;
+pub use self::error::InnerError;
 
 /// A configurable serializer for Roblox binary models and places.
 ///

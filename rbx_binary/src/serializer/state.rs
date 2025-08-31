@@ -50,7 +50,7 @@ pub struct SerializerState<'dom, 'db, W> {
 
     /// All of the instances, in a deterministic order, that we're going to be
     /// serializing.
-    relevant_instances: Vec<Ref>,
+    pub relevant_instances: Vec<Ref>,
 
     /// A map from rbx-dom's unique instance ID (Ref) to the ID space used in
     /// the binary model format, signed integers.
@@ -62,11 +62,11 @@ pub struct SerializerState<'dom, 'db, W> {
 
     /// All of the SharedStrings in the DOM, in the order they'll be written
     // in.
-    shared_strings: Vec<SharedString>,
+    pub shared_strings: Vec<SharedString>,
 
     /// A map of SharedStrings to where it is in the SSTR chunk. This is used
     /// for writing PROP chunks.
-    shared_string_ids: HashMap<SharedString, u32>,
+    pub shared_string_ids: HashMap<SharedString, u32>,
 }
 
 /// An instance class that our serializer knows about. We should have one struct
