@@ -1,5 +1,5 @@
 mod error;
-pub mod state;
+mod state;
 
 use std::io::Write;
 
